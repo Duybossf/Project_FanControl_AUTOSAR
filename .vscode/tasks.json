@@ -1,0 +1,165 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Make: build",
+            "type": "shell",
+            "command": "make",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/c"
+                    ]
+                },
+                "env": {
+                    "PATH": "C:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin;${env:PATH}"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Make: clean",
+            "type": "shell",
+            "command": "make clean",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/c"
+                    ]
+                },
+                "env": {
+                    "PATH": "C:\\msys64\\usr\\bin;C:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin;${env:PATH}"
+                }
+            },
+            "group": "none",
+            "problemMatcher": []
+        },
+        {
+            "label": "Make: build (Renode)",
+            "type": "shell",
+            "command": "make clean all TARGET_ENV=renode",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/c"
+                    ]
+                },
+                "env": {
+                    "PATH": "C:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin;${env:PATH}"
+                }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Renode: cleanup",
+            "type": "shell",
+            "command": "taskkill /IM renode.exe /F & echo Cleaned up",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/c"
+                    ]
+                }
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Renode: start stm32",
+            "type": "shell",
+            "command": "C:\\Program Files\\Renode\\renode.exe",
+            "args": [
+                "--console",
+                "--disable-xwt",
+                "-e",
+                "i @scripts/stm32_sample.resc"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/c"
+                    ]
+                }
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": ".*"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*Renode, version.*",
+                    "endsPattern": ".*Renode ready for GDB connection.*"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Renode: prepare",
+            "dependsOn": [
+                "Renode: cleanup",
+                "Make: build (Renode)",
+                "Renode: start stm32"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: gcc.exe build active file",
+            "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Task generated by Debugger."
+        }
+    ]
+}
